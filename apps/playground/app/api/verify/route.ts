@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
     )
 
     console.log("KHALTI RESPONSE:", data)
+    console.log(process.env.KHALTI_SECRET_KEY)
 
     return NextResponse.json(data)
   } catch (error) {

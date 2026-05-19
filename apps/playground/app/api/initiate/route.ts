@@ -8,6 +8,7 @@ export async function POST() {
     purchase_order_id: "ORDER-1",
     purchase_order_name: "Test Product",
   })
+  console.log("INITIATE RESPONSE:", payment)
 
   return NextResponse.json(payment)
 }

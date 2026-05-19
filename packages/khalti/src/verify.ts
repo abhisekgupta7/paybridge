@@ -1,5 +1,5 @@
 import { KHALTI_BASE_URL_DEV } from "./constants";
-import { buildHeader } from "./utils/build-heasder";
+import { buildHeader } from "./utils/build-header";
 
 export async function verifyPayment(secretKey: string, pidx: string) {
   const response = await fetch(`${KHALTI_BASE_URL_DEV}/epayment/lookup/`, {
