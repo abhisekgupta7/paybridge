@@ -2,5 +2,12 @@
   "name": "@paybridge/docs",
   "version": "0.0.0",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "": "link:/",
+    "fumadocs": "^0.0.0",
+    "fumadocs-mdx": "^15.0.7",
+    "fumadocs-ui": "^16.8.12",
+    "shiki": "^4.1.0"
+  }
 }

@@ -1,0 +1,60 @@
+---
+title: Quickstart
+description: Integrate Khalti payments in minutes.
+---
+
+# Quickstart
+
+Install the SDK:
+
+```bash
+pnpm add @paybridge/khalti
+```
+
+Initialize the client:
+
+```ts
+import { Khalti } from "@paybridge/khalti"
+
+const khalti = new Khalti({
+  secretKey:
+    process.env.KHALTI_SECRET_KEY!,
+})
+```
+
+Initiate a payment:
+
+```ts
+const payment =
+  await khalti.initiate({
+    return_url:
+      "http://localhost:3000/success",
+
+    website_url:
+      "http://localhost:3000",
+
+    amount: 1000,
+
+    purchase_order_id:
+      "ORDER-123",
+
+    purchase_order_name:
+      "Premium Plan",
+  })
+```
+
+Redirect user:
+
+```ts
+window.location.href =
+  payment.payment_url
+```
+
+Verify payment:
+
+```ts
+const result =
+  await khalti.verify(
+    payment.pidx
+  )
+```
