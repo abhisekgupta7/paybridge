@@ -1,20 +1,18 @@
-import { initiatePayment } from "./initiate"
-import { verifyPayment } from "./verify"
-import {initiatePayload, initiateResponse} from "./types"
+import { initiatePayment } from "./initiate";
+import { verifyPayment } from "./verify";
+import { initiatePayload, initiateResponse } from "./types";
 
-export class khalti{
+export class khalti {
+  private secretKey: string;
+  constructor(config: { secretKey: string }) {
+    this.secretKey = config.secretKey;
+  }
 
-    private secretKey:string
-    constructor(config:{secretKey:string})
-    {
-        this.secretKey = config.secretKey
-    }
+  async initiate(Payload: initiatePayload) {
+    return await initiatePayment(this.secretKey, Payload);
+  }
 
-    async initiate(Payload: initiatePayload) {
-        return await initiatePayment(this.secretKey, Payload)
-    }
-
-    async verify(verifyPayload:initiateResponse) {
-        return await verifyPayment(this.secretKey, verifyPayload.pidx)
-    }
+  async verify(verifyPayload: { pidx: string }) {
+    return await verifyPayment(this.secretKey, verifyPayload.pidx);
+  }
 }

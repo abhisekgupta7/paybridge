@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 export default function SuccessPage({
   searchParams,
 }: {
   searchParams: {
-    pidx?: string
-  }
+    pidx?: string;
+  };
 }) {
-  const [loading, setLoading] = useState(true)
-  const [verified, setVerified] = useState(false)
-  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(true);
+  const [verified, setVerified] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     async function verifyPayment() {
       try {
         if (!searchParams.pidx) {
-          setMessage("Missing payment ID")
-          setLoading(false)
-          return
+          setMessage("Missing payment ID");
+          setLoading(false);
+          return;
         }
 
         const response = await fetch("/api/verify", {
@@ -30,43 +30,39 @@ export default function SuccessPage({
           body: JSON.stringify({
             pidx: searchParams.pidx,
           }),
-        })
+        });
 
-        const data = await response.json()
+        const data = await response.json();
 
-        if (data.status === "Completed") {
-          setVerified(true)
-          setMessage("Payment verified successfully")
+        if (data.verified) {
+          setVerified(true);
+          setMessage(data.message);
         } else {
-          setVerified(false)
-          setMessage(data.message)
+          setVerified(false);
+          setMessage(data.message ?? "Payment verification failed");
         }
       } catch (error) {
-        setVerified(false)
-        setMessage("Something went wrong")
+        setVerified(false);
+        setMessage("Something went wrong");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    verifyPayment()
-  }, [searchParams.pidx])
+    verifyPayment();
+  }, [searchParams.pidx]);
 
   if (loading) {
-    return <div>Verifying payment...</div>
+    return <div>Verifying payment...</div>;
   }
 
   return (
     <div>
-      <h1>
-        {verified
-          ? "Payment Successful"
-          : "Payment Failed"}
-      </h1>
+      <h1>{verified ? "Payment Successful" : "Payment Failed"}</h1>
 
       <p>{message}</p>
 
       <p>Pidx: {searchParams.pidx}</p>
     </div>
-  )
+  );
 }

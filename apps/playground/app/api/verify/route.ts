@@ -1,29 +1,45 @@
-import { NextRequest, NextResponse } from "next/server"
-import { Khalti } from "../../../lib/khalti"
+import { NextRequest, NextResponse } from "next/server";
+import { Khalti } from "../../../lib/khalti";
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const body = await req.json();
 
-    console.log("BODY:", body)
+    if (!body?.pidx) {
+      return NextResponse.json(
+        { verified: false, message: "Missing payment ID" },
+        { status: 400 },
+      );
+    }
 
-    const data = await Khalti.verify(
-      body.pidx
-    )
+    const data = await Khalti.verify({ pidx: body.pidx });
 
-    console.log("KHALTI RESPONSE:", data)
-    console.log(process.env.KHALTI_SECRET_KEY)
-
-    return NextResponse.json(data)
-  } catch (error) {
-    console.error(error)
+    if (data.status === "Completed") {
+      return NextResponse.json({
+        verified: true,
+        message: "Payment verified successfully",
+        status: data.status,
+        data,
+      });
+    }
 
     return NextResponse.json(
       {
-        message: "Verification failed",
+        verified: false,
+        message: `Payment is ${data.status.toLowerCase()}`,
+        status: data.status,
+        data,
       },
+      { status: 400 },
+    );
+  } catch (error) {
+    console.error("VERIFY ERROR:", error);
+
+    return NextResponse.json(
       {
-        status: 500,
-      }
-    )
+        verified: false,
+        message: error instanceof Error ? error.message : "Verification failed",
+      },
+      { status: 400 },
+    );
   }
 }

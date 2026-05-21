@@ -1,4 +1,6 @@
 import { KHALTI_BASE_URL_DEV } from "./constants";
+import { KhaltiError } from "./errors";
+import { verifyResponse } from "./types";
 import { buildHeader } from "./utils/build-header";
 
 export async function verifyPayment(secretKey: string, pidx: string) {
@@ -9,5 +11,16 @@ export async function verifyPayment(secretKey: string, pidx: string) {
       pidx,
     }),
   });
-  return await response.json();
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new KhaltiError(data?.detail ?? "Verification failed");
+  }
+
+  if (data?.detail) {
+    throw new KhaltiError(data.detail);
+  }
+
+  return data as verifyResponse;
 }

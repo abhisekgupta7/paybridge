@@ -11,6 +11,14 @@ interface initiateResponse {
     expires_at: string;
     expires_in: number;
 }
+interface verifyResponse {
+    pidx: string;
+    total_amount: number;
+    status: "Completed" | "Pending" | "Initiated" | "Refunded" | "Expired" | "User canceled" | "Partially Refunded";
+    transaction_id: string | null;
+    fee: number;
+    refunded: boolean;
+}
 
 declare class khalti {
     private secretKey;
@@ -18,11 +26,13 @@ declare class khalti {
         secretKey: string;
     });
     initiate(Payload: initiatePayload): Promise<initiateResponse>;
-    verify(verifyPayload: initiateResponse): Promise<any>;
+    verify(verifyPayload: {
+        pidx: string;
+    }): Promise<verifyResponse>;
 }
 
 declare class KhaltiError extends Error {
     constructor(message: string);
 }
 
-export { KhaltiError, type initiatePayload, type initiateResponse, khalti };
+export { KhaltiError, type initiatePayload, type initiateResponse, khalti, type verifyResponse };

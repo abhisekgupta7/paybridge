@@ -1,6 +1,6 @@
 export function buildHeader(secretKey: string) {
-    return {
-        "Authorization": `Key ${secretKey}`,
-        "Content-Type": "application/json"
-    }
+  return {
+    Authorization: `key ${secretKey}`,
+    "Content-Type": "application/json",
+  };
 }
